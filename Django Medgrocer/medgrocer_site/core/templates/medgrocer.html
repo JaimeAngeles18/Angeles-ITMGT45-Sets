@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedGrocer – Product Page</title>
+
+    {% load static %}
+    <!-- Import a Google Font for a clean mobile look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        /* Brand color pulled from the reference screenshot */
+        --brand-teal: #0e6976;
+        --text-muted: #6b7280;
+        --price-bg: #111111;
+      }
+
+      * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: #ffffff;
+        color: #111827;
+      }
+
+      /* ---------- Header ---------- */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+      }
+
+      .brand {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+      }
+
+      .brand__name {
+        font-weight: 600;
+        font-size: 1.25rem; /* 20 px */
+        color: var(--brand-teal);
+        margin: 0;
+      }
+
+      .brand__greeting {
+        font-size: 0.75rem; /* 12 px */
+        color: var(--text-muted);
+        margin: 2px 0 0;
+      }
+
+      .header-icons {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .header-icons img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* ---------- Product Image & Overlays ---------- */
+      .product-img-wrapper {
+        position: relative;
+        width: 100%;
+        max-width: 460px;
+        margin: 0 auto;
+      }
+
+      .product-img-wrapper img.main-img {
+        width: 100%;
+        display: block;
+      }
+
+      .overlay-icons {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .overlay-icons img {
+        width: 32px;
+        height: 32px;
+      }
+
+      /* ---------- Product Info Section ---------- */
+      .product-info {
+        padding: 24px 16px 32px;
+      }
+
+      .product-title {
+        margin: 0 0 4px;
+        font-size: 1.75rem; /* 28 px */
+        font-weight: 700;
+        color: #111827;
+      }
+
+      .drug-type {
+        margin: 0 0 20px;
+        font-size: 1rem;
+        font-style: italic;
+        color: #111827;
+      }
+
+      .rating-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 28px;
+      }
+
+      .stars {
+        font-size: 1.125rem; /* 18 px */
+        color: #facc15; /* gold */
+        letter-spacing: 2px;
+      }
+
+      .rating-count {
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+
+      .see-reviews {
+        margin-left: auto;
+        font-size: 0.875rem;
+        text-decoration: none;
+        color: var(--text-muted);
+      }
+
+      .see-reviews::after {
+        content: ' \203A'; /* single right angle quote */
+      }
+
+      .desc-heading {
+        margin: 0 0 8px;
+        font-size: 1.5rem; /* 24 px */
+        font-weight: 700;
+        color: #111827;
+      }
+
+      .desc-text {
+        margin: 0 0 24px;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--text-muted);
+      }
+
+      .purchase-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: nowrap;
+      }
+
+      .qty-btn {
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.75rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .qty-btn.minus {
+        background-color: #e5e7eb; /* gray 200 */
+        color: #374151;
+      }
+
+      .qty-btn.plus {
+        background-color: #000000;
+        color: #ffffff;
+      }
+
+      .qty-value {
+        font-size: 1.25rem; /* 20 px */
+        min-width: 24px;
+        text-align: center;
+      }
+
+      .price-box {
+        display: flex;
+        align-items: center;
+        background-color: var(--price-bg);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-left: auto;
+      }
+
+      .price {
+        padding: 0 24px;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #ffffff;
+        white-space: nowrap;
+      }
+
+      .price-cart {
+        background-color: var(--brand-teal);
+        padding: 14px 22px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
+
+      .price-cart img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* ---------- Bottom Navigation ---------- */
+      nav.bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 8px 0 12px;
+        border-top: 1px solid #e5e7eb;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        gap: 48px;
+        z-index: 100;
+      }
+
+      nav.bottom-nav img {
+        width: 28px;
+        height: 28px;
+      }
+
+      /* ---------- Responsive Container ---------- */
+      /* Constrain width on larger viewports so it still looks like a mobile mock-up */
+      .phone-frame {
+        max-width: 480px;
+        margin: 0 auto 120px; /* extra space for the bottom nav */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="phone-frame">
+      <!-- ===== Header ===== -->
+      <header>
+        <div class="brand">
+          <h1 class="brand__name">MedGrocer</h1>
+          <span class="brand__greeting">Good Morning!</span>
+        </div>
+
+        <div class="header-icons">
+          <img src="{% static 'cart2.png' %}" alt="Shopping Cart" />
+          <img src="{% static 'bar.png' %}" alt="Menu" />
+        </div>
+      </header>
+
+      <!-- ===== Product Image ===== -->
+      <section class="product-img-wrapper">
+        <img
+          class="main-img"
+          src="{% static 'storeimage.png' %}"
+          alt="Glumet Metformin 850 mg – product box and blister pack"
+        />
+        <div class="overlay-icons">
+          <img src="{% static 'heart2.png' %}" alt="Add to wishlist" />
+          <img src="{% static 'share.png' %}" alt="Share" />
+        </div>
+      </section>
+
+      <!-- ===== Product Info ===== -->
+      <section class="product-info">
+        <h2 class="product-title">Glumet Metformin 850mg x1</h2>
+        <p class="drug-type"><em>Prescription Drug</em></p>
+
+        <div class="rating-row">
+          <span class="stars">★★★★★</span>
+          <span class="rating-count">8,340</span>
+          <a href="#" class="see-reviews">see reviews</a>
+        </div>
+
+        <h3 class="desc-heading">Description</h3>
+        <p class="desc-text">
+          Metformin hydrochloride (Glumet®) is a biguanide hypoglycemic agent used
+          in the treatment of Non-Insulin-Dependent Diabetes Mellitus.
+        </p>
+
+        <div class="purchase-row">
+          <button class="qty-btn minus">−</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn plus">+</button>
+
+          <div class="price-box">
+            <span class="price">₱11.95</span>
+            <div class="price-cart">
+              <img src="{% static 'greencart.png' %}" alt="Add to cart" />
+            </div>
+          </div></
